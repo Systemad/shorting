@@ -1,0 +1,49 @@
+﻿@page "/"
+
+
+@if (ShortenedUrl is not null)
+{
+    <MudAlert Severity="Severity.Success">@ShortenedUrl.ToString()</MudAlert>
+}
+<MudPaper Class="pa-16 my-4" Elevation="5">
+    <MudStack Class="mt-8" Row="true" Spacing="16">
+        <MudSwitch @bind-Checked="@customOptions"
+                   LabelPosition="LabelPosition.Start"
+                   ThumbIcon="@Icons.Custom.Brands.MudBlazor"
+                   ThumbIconColor="Color.Info">
+            Custom options
+        </MudSwitch>
+        <MudTextField
+            @bind-Value="URL"
+            Label="Enter a url"
+            Clearable="true"
+            HelperTextOnFocus="true"
+            HelperText="Enter a url to shorten"
+            Variant="Variant.Outlined"/>
+        <MudPaper Class="mt-4" Elevation="0">
+            <MudButton Disabled="@_processing" OnClick="ShortenUrl" Variant="Variant.Filled" Color="Color.Primary">
+                @if (_processing)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                    <MudText Class="ms-2">shorting</MudText>
+                }
+                else
+                {
+                    <MudText>shorten</MudText>
+                }
+            </MudButton>
+        </MudPaper>
+    </MudStack>
+</MudPaper>
+@if (customOptions)
+{
+    <MudPaper Class="pa-4" Elevation="5">
+        <MudTextField
+            @bind-Value="customUrlName"
+            Label="Enter shortened a url"
+            Clearable="true"
+            HelperTextOnFocus="true"
+            HelperText="Enter a custom shortened URL instead of an auto generated one"
+            Variant="Variant.Outlined"/>
+    </MudPaper>    
+}
