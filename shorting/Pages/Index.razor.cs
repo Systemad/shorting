@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using shorting.Grains;
+using shorting.Helpers;
 using shorting.Models;
 
 namespace shorting.Pages;
@@ -15,9 +16,16 @@ public partial class Index
     private string customUrlName;
     private string? ShortenedUrl;
 
+    private static Dictionary<int, string> ExpirationOptions;
     private CustomUrlOptions CustomUrlOptions { get; set; } = new();
     private bool customOptions = false;
     private bool _processing = false;
+
+    protected override void OnInitialized()
+    {
+        ExpirationOptions = SettingsHelper.GetExpirationOptions();
+    }
+
     private async Task ShortenUrl()
     {
         if (string.IsNullOrEmpty(URL) || string.IsNullOrWhiteSpace(URL))
@@ -41,5 +49,4 @@ public partial class Index
         }
         _processing = false;
     }
-    
 }
