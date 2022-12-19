@@ -11,5 +11,5 @@ public interface IUrlShortenerGrain : IGrainWithStringKey
 {
     Task<string> CreateUrl(string urlToShort, string currentUrl);
     Task<string> CreateUrl(string urlToShort, string currentUrl, CustomUrlOptions options);
-    Task<string> GetUrl();
+    Task<string> GetUrlUnShortedUrl();
 }

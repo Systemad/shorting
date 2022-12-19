@@ -16,7 +16,7 @@ public partial class Index
     private string customUrlName;
     private string? ShortenedUrl;
 
-    private static Dictionary<int, string> ExpirationOptions;
+    private static Dictionary<string, int> ExpirationOptions = new();
     private CustomUrlOptions CustomUrlOptions { get; set; } = new();
     private bool customOptions = false;
     private bool _processing = false;

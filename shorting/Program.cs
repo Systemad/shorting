@@ -38,7 +38,7 @@ app.MapFallbackToPage("/_Host");
 app.MapGet("/shtn/{shortenedurl}", async (IGrainFactory grain, string shortenedurl) =>
 {
     var shortenedGrain = grain.GetGrain<IUrlShortenerGrain>(shortenedurl);
-    var url = await shortenedGrain.GetUrl();
+    var url = await shortenedGrain.GetUrlUnShortedUrl();
     return Results.Redirect(url);
 });
 

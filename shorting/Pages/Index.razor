@@ -43,10 +43,11 @@
             HelperText="Enter a custom shortened URL instead of an auto generated one"
             Variant="Variant.Outlined"/>
         <MudDivider/>
-        <MudSelect T="int" Label="Expiration" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
-            <MudSelectItem T="int" Value="0"/>
-            <MudSelectItem T="int" Value="4.99"/>
-            <MudSelectItem T="int" Value="3.60"/>
+        <MudSelect T="string" Label="Expiration" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var (key, value) in ExpirationOptions)
+            {
+                <MudSelectItem T="string" Value="key"/>
+            }
         </MudSelect>
     </MudPaper>    
 }
