@@ -43,11 +43,12 @@
             HelperText="Enter a custom shortened URL instead of an auto generated one"
             Variant="Variant.Outlined"/>
         <MudDivider/>
-        <MudSelect T="string" Label="Expiration" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect T="string" bind-Value="@CustomUrlOptions.ExpirationKey" Label="Expiration" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
             @foreach (var (key, value) in ExpirationOptions)
             {
                 <MudSelectItem T="string" Value="key"/>
             }
         </MudSelect>
-    </MudPaper>    
+        <MudNumericField @bind-Value="@CustomUrlOptions.AccessAmount" Label="Access limit" Variant="Variant.Outlined" />
+    </MudPaper>
 }

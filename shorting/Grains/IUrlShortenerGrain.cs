@@ -9,7 +9,6 @@ namespace shorting.Grains;
  */
 public interface IUrlShortenerGrain : IGrainWithStringKey
 {
-    Task<string> CreateUrl(string urlToShort, string currentUrl);
-    Task<string> CreateUrl(string urlToShort, string currentUrl, CustomUrlOptions options);
+    Task<string> CreateUrl(string urlToShort, string currentUrl, CustomUrlOptions options = null);
     Task<string> GetUrlUnShortedUrl();
 }

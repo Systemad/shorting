@@ -1,15 +1,47 @@
 using MudBlazor.Services;
-using shorting.Grains;
+using shorting.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseOrleans(siloBuilder =>
+var invariant = "Npgsql";
+var connectionString =
+    "Host=localhost;Port=5432;Database=shorting;Username=postgres;Password=Compaq2009";
+
+// TODO: Scripts needs to ran manually
+// https://github.com/dotnet/orleans/blob/main/src/AdoNet/Orleans.Clustering.AdoNet/Migrations/PostgreSQL-Clustering-3.7.0.sql
+// https://learn.microsoft.com/en-us/dotnet/orleans/host/configuration-guide/adonet-configuration
+builder.Host.UseOrleans((ctx, siloBuilder) =>
 {
-    siloBuilder.UseLocalhostClustering();
-    siloBuilder.AddMemoryGrainStorageAsDefault();
-    siloBuilder.AddMemoryGrainStorage("urls");
-    //siloBuilder UseInMemoryReminderService();
+    /*
+    if (builder.Environment.IsDevelopment())
+    {
+        siloBuilder.UseLocalhostClustering();
+        siloBuilder.AddMemoryGrainStorageAsDefault();
+        siloBuilder.AddMemoryGrainStorage("urls");
+        siloBuilder.UseInMemoryReminderService();
+    }
+    else
+    {
+        */
+    siloBuilder.UseAdoNetClustering(options =>
+        {
+            options.Invariant = invariant;
+            options.ConnectionString = connectionString;
+        });
+    siloBuilder.UseAdoNetReminderService(options =>
+        {           
+            options.Invariant = invariant;
+            options.ConnectionString = connectionString;
+        });  
+    siloBuilder.AddAdoNetGrainStorage("urls",options =>
+        {
+            options.Invariant = invariant;
+            options.ConnectionString = connectionString;
+            //options.UseJsonFormat = true;
+        });
+        //}
 });
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -35,11 +67,7 @@ app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-app.MapGet("/shtn/{shortenedurl}", async (IGrainFactory grain, string shortenedurl) =>
-{
-    var shortenedGrain = grain.GetGrain<IUrlShortenerGrain>(shortenedurl);
-    var url = await shortenedGrain.GetUrlUnShortedUrl();
-    return Results.Redirect(url);
-});
+// Add Url endpoints
+app.MapUrlApi();
 
 app.Run();
