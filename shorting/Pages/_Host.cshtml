@@ -29,6 +29,19 @@
 </div>
 
 <script src="_framework/blazor.server.js"></script>
+<!--
+<script>
+  Blazor.start({
+    configureSignalR: function (builder) {
+      let c = builder.build();
+      c.serverTimeoutInMilliseconds = 60000;
+      builder.build = () => {
+        return c;
+      };
+    }
+  });
+</script>
+-->
 <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 </body>
 </html>

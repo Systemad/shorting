@@ -1,0 +1,25 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+      role: database
+  template:
+    metadata:
+      labels:
+        app: postgres
+        role: database
+    spec:
+      containers:
+      - name: shortingdb-container
+        image: becknova/shortingdb-1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+          - name: postgresql
+            containerPort: 5432
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60

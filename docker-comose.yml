@@ -1,0 +1,22 @@
+﻿version: '3.4'
+# add https://learn.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-7.0
+# fix ports
+services: 
+  app:
+    image: shortingapp
+    build:
+      context: .
+      dockerfile: shorting/Dockerfile
+    depends_on:
+      - shortingdb
+        
+  
+  shortingdb:
+    image: becknova/shortingdb-1.0
+    ports: 
+      - "5432"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Compaq2009"
+      POSTGRES_DB: "shorting-db"
+      

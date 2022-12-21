@@ -1,7 +1,9 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
+#EXPOSE 443
+EXPOSE 11111
+EXPOSE 30000
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
