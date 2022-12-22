@@ -10,7 +10,6 @@ var connectionString =
 
 builder.Host.UseOrleans((ctx, siloBuilder) =>
 {
-    /*
     if (builder.Environment.IsDevelopment())
     {
         siloBuilder.UseLocalhostClustering();
@@ -20,8 +19,6 @@ builder.Host.UseOrleans((ctx, siloBuilder) =>
     }
     else
     {
-        */
-
         siloBuilder.ConfigureEndpoints(11111, 30000);
         siloBuilder.UseAdoNetClustering(options =>
         {
@@ -29,23 +26,23 @@ builder.Host.UseOrleans((ctx, siloBuilder) =>
             options.ConnectionString = connectionString;
         });
         siloBuilder.UseAdoNetReminderService(options =>
-        {           
+        {
             options.Invariant = invariant;
             options.ConnectionString = connectionString;
-        });  
-        siloBuilder.AddAdoNetGrainStorage("urls",options =>
+        });
+        siloBuilder.AddAdoNetGrainStorage("urls", options =>
         {
             options.Invariant = invariant;
             options.ConnectionString = connectionString;
             //options.UseJsonFormat = true;
         });
-        //}
 
         siloBuilder.Configure<ClusterOptions>(options =>
         {
             options.ClusterId = "shortingCluster";
             options.ServiceId = "shortingService";
         });
+    }
 });
 
 // Add services to the container.
