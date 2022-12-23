@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
 using shorting.Grains;
 using shorting.Helpers;
@@ -13,7 +14,7 @@ public partial class Index
     [Inject] private NavigationManager NavigationManager { get; set; }
     
     private string URL;
-    private string customUrlName;
+    private string? _customUrlName;
     private string? ShortenedUrl;
 
     private static Dictionary<string, int> ExpirationOptions = new();
@@ -34,10 +35,12 @@ public partial class Index
             return;
         }
         _processing = true;
-        var shortenedSegment = Guid.NewGuid().GetHashCode().ToString("X");
-        var shortGrain = _grainFactory.GetGrain<IUrlShortenerGrain>(shortenedSegment);
+        
+        // TODO: catch error if custom url name has already been use and display nicely
         if (customOptions)
         {
+            var url = _customUrlName ?? UrlHelper.GetUrl();
+            var shortGrain = _grainFactory.GetGrain<IUrlShortenerGrain>(url);
             ShortenedUrl = await shortGrain.CreateUrl(
                 URL, 
                 NavigationManager.ToAbsoluteUri(NavigationManager.Uri).AbsoluteUri,
@@ -45,8 +48,16 @@ public partial class Index
         }
         else
         {
+            var url = UrlHelper.GetUrl();
+            var shortGrain = _grainFactory.GetGrain<IUrlShortenerGrain>(url);
             ShortenedUrl = await shortGrain.CreateUrl(URL, NavigationManager.ToAbsoluteUri(NavigationManager.Uri).AbsoluteUri);   
         }
         _processing = false;
+    }
+
+    private void GetExpirationValue(string minutes)
+    {
+        CustomUrlOptions.ExpirationMinutes = minutes.GetExpirationOption();
+        Console.WriteLine(minutes + " " + CustomUrlOptions.ExpirationMinutes);
     }
 }

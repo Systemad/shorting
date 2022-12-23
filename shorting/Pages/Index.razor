@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using shorting.Helpers
 
 
 @if (ShortenedUrl is not null)
@@ -34,19 +35,18 @@
 </MudPaper>
 @if (customOptions)
 {
-    <MudPaper Class="pa-4 d-flex flex-row justify-space-evenly" Elevation="5">
+    <MudPaper Class="d-flex justify-space-around align-content-center flex-row-1 gap-4 pa-4" Elevation="5">
         <MudTextField
-            @bind-Value="customUrlName"
+            @bind-Value="_customUrlName"
             Label="Enter shortened a url"
             Clearable="true"
             HelperTextOnFocus="true"
             HelperText="Enter a custom shortened URL instead of an auto generated one"
             Variant="Variant.Outlined"/>
-        <MudDivider/>
-        <MudSelect T="string" bind-Value="@CustomUrlOptions.ExpirationKey" Label="Expiration" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect ValueChanged="GetExpirationValue" T="string" Label="Expiration" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
             @foreach (var (key, value) in ExpirationOptions)
             {
-                <MudSelectItem T="string" Value="key"/>
+                <MudSelectItem T="string" Value="@key"/>
             }
         </MudSelect>
         <MudNumericField @bind-Value="@CustomUrlOptions.AccessAmount" Label="Access limit" Variant="Variant.Outlined" />

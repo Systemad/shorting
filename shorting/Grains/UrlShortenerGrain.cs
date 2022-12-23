@@ -4,9 +4,10 @@ using shorting.Models;
 
 namespace shorting.Grains;
 
-public class UrlShortenerGrain : Grain, IUrlShortenerGrain
+public class UrlShortenerGrain : Grain, IUrlShortenerGrain //, IRemindable
 {
     private readonly IPersistentState<UrlShortenerGrainState> _state;
+    
 
     public UrlShortenerGrain(
         [PersistentState(stateName:"url", storageName:"urls")]
@@ -22,17 +23,16 @@ public class UrlShortenerGrain : Grain, IUrlShortenerGrain
         if (_state.State.IsCreated) throw new InvalidOperationException("Url already exist!");
         if (options is not null)
         {
-            if (options.ExpirationKey is not null)
+            if (options.ExpirationMinutes != 0)
             {
                 _state.State.ExpirationSet = true;
-                if(options.ExpirationKey is not "none")
-                    _state.State.Expiration = TimeSpan.FromSeconds(options.ExpirationKey.GetExpirationOption());
+                _state.State.Expiration = TimeSpan.FromSeconds(options.ExpirationMinutes);
             }
-            if (options.AccessAmount is not null)
+            if (options.AccessAmount != 0)
             {
                 _state.State.AccessLimitSet = true;
-                _state.State.AccessLimit = options.AccessAmount;
-            }   
+                _state.State.AccessLimit = options.AccessAmount;    
+            }
         }
         var formattedUrl = new Uri(Uri.UriSchemeHttps + Uri.SchemeDelimiter + urlToShort);
         _state.State._cache = new KeyValuePair<string, string>(GrainKey, formattedUrl.AbsoluteUri);
@@ -68,4 +68,19 @@ public class UrlShortenerGrain : Grain, IUrlShortenerGrain
             throw new InvalidOperationException("Url has expired");
         }
     }
+
+    /*
+    public async Task RegisterExpiration(int time)
+    {
+        IGrainReminder reminder;
+        
+        reminder = await this.RegisterOrUpdateReminder()
+    }
+    
+    public Task ReceiveReminder(string reminderName, TickStatus status)
+    {
+        w
+        throw new NotImplementedException();
+    }
+    */
 }
