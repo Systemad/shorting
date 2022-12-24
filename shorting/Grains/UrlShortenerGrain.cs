@@ -1,5 +1,4 @@
 ﻿using Orleans.Runtime;
-using shorting.Helpers;
 using shorting.Models;
 
 namespace shorting.Grains;
@@ -8,7 +7,6 @@ public class UrlShortenerGrain : Grain, IUrlShortenerGrain //, IRemindable
 {
     private readonly IPersistentState<UrlShortenerGrainState> _state;
     
-
     public UrlShortenerGrain(
         [PersistentState(stateName:"url", storageName:"urls")]
         IPersistentState<UrlShortenerGrainState> state)

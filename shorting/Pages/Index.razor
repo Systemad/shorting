@@ -4,9 +4,22 @@
 
 @if (ShortenedUrl is not null)
 {
-    <MudAlert Severity="Severity.Success">@ShortenedUrl.ToString()</MudAlert>
+    <MudPaper Class="pa-4 d-flex justify-space-around rounded-xl">
+       
+            <MudText>Generated URL: </MudText>
+            <MudLink Href="@ShortenedUrl">@ShortenedUrl</MudLink>
+        
+        <MudDivider Vertical="true" FlexItem="true"/>
+        @if (customOptions)
+        {
+            var accessUnlimited = CustomUrlOptions.AccessAmount == 0;
+            var hasExpirationLimit = CustomUrlOptions.ExpirationMinutes == 0;
+            <MudText>Access limit: @(accessUnlimited ? "Unlimited" : CustomUrlOptions.AccessAmount)</MudText>
+            <MudText>Expiration (minutes):  @(hasExpirationLimit ? "None" : CustomUrlOptions.ExpirationMinutes)</MudText>
+        }
+    </MudPaper>
 }
-<MudPaper Class="pa-16 my-4" Elevation="5">
+<MudPaper Class="pa-8 my-4 rounded-xl" Elevation="5">
     <MudStack Class="mt-8" Row="true" Spacing="16">
         <MudSwitch @bind-Checked="@customOptions"
                    ThumbIcon="@Icons.Material.Filled.Settings"
@@ -16,10 +29,10 @@
             Label="Enter a url"
             Clearable="true"
             HelperTextOnFocus="true"
-            HelperText="Enter a url to shorten"
+            Class="rounded-xl"
+            HelperText="Enter a URL to shorten"
             Variant="Variant.Outlined"/>
-        <MudPaper Class="mt-4" Elevation="0">
-            <MudButton Disabled="@_processing" OnClick="ShortenUrl" Variant="Variant.Filled" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Link">
+        <MudButton Color="Color.Primary" Class="mt-2" Style="height: 50px" Disabled="@_processing" OnClick="ShortenUrl" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Link">
                 @if (_processing)
                 {
                     <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
@@ -30,18 +43,17 @@
                     <MudText>shorten</MudText>
                 }
             </MudButton>
-        </MudPaper>
     </MudStack>
 </MudPaper>
 @if (customOptions)
 {
-    <MudPaper Class="d-flex justify-space-around align-content-center flex-row-1 gap-4 pa-4" Elevation="5">
+    <MudPaper Class="d-flex flex-row-1 gap-4 pa-4 rounded-xl" Elevation="5">
         <MudTextField
             @bind-Value="_customUrlName"
-            Label="Enter shortened a url"
+            Label="Enter a custom url"
             Clearable="true"
             HelperTextOnFocus="true"
-            HelperText="Enter a custom shortened URL instead of an auto generated one"
+
             Variant="Variant.Outlined"/>
         <MudSelect ValueChanged="GetExpirationValue" T="string" Label="Expiration" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
             @foreach (var (key, value) in ExpirationOptions)

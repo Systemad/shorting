@@ -1,7 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using MudBlazor.Utilities
+@inherits LayoutComponentBase
 
 <PageTitle>shorting</PageTitle>
-<MudThemeProvider IsDarkMode="true"/>
+<MudThemeProvider IsDarkMode="true" Theme="_theme"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
@@ -12,3 +13,19 @@
         </MudContainer>
     </MudMainContent>
 </MudLayout>
+
+@code{
+
+    MudTheme _theme = new()
+        {
+            LayoutProperties = new LayoutProperties { DefaultBorderRadius = "24px" },
+            
+            PaletteDark = new PaletteDark
+            {
+                Primary = "#AB6F7F",
+                Background = (MudColor) "#232526",
+                Surface = (MudColor) "#313435",
+            }
+        };
+
+}
