@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using MudBlazor;
 using shorting.Grains;
 using shorting.Helpers;
@@ -12,6 +12,7 @@ public partial class Index
     [Inject] private IGrainFactory _grainFactory { get; set; }
     [Inject] private ISnackbar Snackbar { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
+    [Inject] private IJSRuntime JsRuntime { get; set; }
     
     private string URL;
     private string? _customUrlName;
@@ -59,5 +60,11 @@ public partial class Index
     {
         CustomUrlOptions.ExpirationMinutes = minutes.GetExpirationOption();
         Console.WriteLine(minutes + " " + CustomUrlOptions.ExpirationMinutes);
+    }
+    
+    private async Task CopyTextToClipboard()
+    {
+        if(ShortenedUrl is not null)
+            await JsRuntime.InvokeVoidAsync("clipboardCopy.copyText", ShortenedUrl);
     }
 }

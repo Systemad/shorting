@@ -40,6 +40,13 @@ public class UrlShortenerGrain : Grain, IUrlShortenerGrain //, IRemindable
         {
             Path = $"/shorting/{GrainKey}"
         };
+
+        var newUrl = new UrlDto
+        {
+            ShortenedUrl = resultBuilder.ToString(),
+            ExpirationMinutes = 0,
+            AccessAmount = 0
+        };
         return resultBuilder.ToString();
     }
     
